@@ -1,0 +1,1080 @@
+import 'package:flutter/material.dart';
+import 'inscription.dart';
+import 'accueil.dart';
+import 'tutoriel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SignUpPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey[900],
+        title: Text(
+          'Test',
+          style: TextStyle(
+            fontFamily: 'Pacifico',
+            fontSize: 24,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                    100, 80, 0, 0), // Position de la boîte de dialogue
+                items: [
+                  PopupMenuItem(
+                    child: Text('Mot de passe oublié'),
+                    value: 'forgot_password',
+                  ),
+                  PopupMenuItem(
+                    child: Text('Aide'),
+                    value: 'help',
+                  ),
+                  PopupMenuItem(
+                    child: Text('Mentions légales'),
+                    value: 'legal',
+                  ),
+                  PopupMenuItem(
+                    child: Text('Conditions'),
+                    value: 'conditions',
+                  ),
+                  PopupMenuItem(
+                    child: Text('Politique de confidentialité'),
+                    value: 'privacy_policy',
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 100),
+          Text(
+            'Inscription',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Colors.pink,
+            ),
+          ),
+          SizedBox(height: 100),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Formulaire d\'inscription'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Adresse e-mail',
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        TextField(
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Mot de passe',
+                          ),
+                          obscureText: true,
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          // Action à effectuer lorsque le bouton "Inscription" du formulaire est cliqué
+                          // Vérification des informations, création du compte, etc.
+                          Navigator.pop(context);
+                        },
+                        child: Text('Inscription'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Text(
+              'Inscription',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(double.infinity, 60),
+              primary: Colors.pink,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+          SizedBox(height: 32),
+          Text(
+            'Ou inscrivez-vous avec:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Action à effectuer lorsque le bouton "S'inscrire avec Google" est cliqué
+                },
+                child: Text('Google'),
+                style: ElevatedButton.styleFrom(primary: Colors.red),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Action à effectuer lorsque le bouton "S'inscrire avec Facebook" est cliqué
+                },
+                child: Text('Facebook'),
+                style: ElevatedButton.styleFrom(primary: Colors.blue),
+              ),
+            ],
+          ),
+          SizedBox(height: 32),
+          Text(
+            'Vous avez déjà un compte ?',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Formulaire d\'inscription'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Adresse e-mail',
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        TextField(
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Mot de passe',
+                          ),
+                          obscureText: true,
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          if (emailController.text == 'test' &&
+                              passwordController.text == 'azer') {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return InscriptionReussieDialog(
+                                    email: emailController.text);
+                              },
+                            ).then((_) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AccueilPage()),
+                              );
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'Adresse e-mail ou mot de passe incorrect.')),
+                            );
+                          }
+                        },
+                        child: Text('Inscription'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Text(
+              'S\'identifier',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.pink,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'En créant un compte, vous acceptez nos ',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[800],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Action à effectuer lorsque les conditions d'utilisation sont cliquées
+                },
+                child: Text(
+                  'Terms of Service',
+                  style: TextStyle(
+                    color: Colors.pink,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              Text(
+                ' et notre ',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[800],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Action à effectuer lorsque la politique de confidentialité est cliquée
+                },
+                child: Text(
+                  'Privacy Policy',
+                  style: TextStyle(
+                    color: Colors.pink,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  Future<bool> isFirstLaunch() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+
+    if (isFirstLaunch) {
+      await prefs.setBool('isFirstLaunch', false);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: isFirstLaunch(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Ou un autre widget en attendant la résolution du Future
+        } else if (snapshot.hasData) {
+          bool isFirstLaunch = snapshot.data!;
+
+          return MaterialApp(
+            theme: ThemeData(
+              primaryColor: Colors.pink,
+              scaffoldBackgroundColor: Colors.grey[900],
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(primary: Colors.pink),
+              ),
+            ),
+            home: isFirstLaunch ? TutorialPage() : SignUpPage(),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Une erreur s\'est produite'); // Affichage de l'erreur si nécessaire
+        } else {
+          return Text('Aucune donnée'); // Affichage par défaut si aucune donnée n'a été récupérée
+        }
+      },
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import 'package:flutter/material.dart';
+
+
+class TutorialPage extends StatefulWidget {
+  const TutorialPage({Key? key}) : super(key: key);
+
+  @override
+  _TutorialPageState createState() => _TutorialPageState();
+}
+
+class _TutorialPageState extends State<TutorialPage> {
+  int currentPage = 0;
+  final PageController _pageController = PageController();
+
+  final List<Widget> tutorialPages = [
+    TutorialContentPage(
+      image: AssetImage('assets/tutorial_page1.png'),
+      text: 'Page 1',
+    ),
+    TutorialContentPage(
+      image: AssetImage('assets/tutorial_page2.png'),
+      text: 'Page 2',
+    ),
+    TutorialContentPage(
+      image: AssetImage('assets/tutorial_page3.png'),
+      text: 'Page 3',
+    ),
+    TutorialContentPage(
+      image: AssetImage('assets/tutorial_page4.png'),
+      text: 'Page 4',
+    ),
+    TutorialContentPage(
+      image: AssetImage('assets/tutorial_page5.png'),
+      text: 'Page 5',
+    ),
+    SettingsPage(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tutoriel'),
+      ),
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            itemCount: tutorialPages.length,
+            itemBuilder: (context, index) {
+              return tutorialPages[index];
+            },
+            onPageChanged: (index) {
+              setState(() {
+                currentPage = index;
+              });
+            },
+          ),
+          Positioned(
+            top: 20,
+            right: 20,
+            child: ElevatedButton(
+              onPressed: () {
+                // Aller à la page des paramètres
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsPage(),
+                  ),
+                );
+              },
+              child: const Text('Passer'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                shadowColor: Colors.transparent,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                tutorialPages.length,
+                    (index) => Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    height: 8,
+                    width: 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: currentPage == index ? Colors.blue : Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          if (currentPage > 0)
+            Positioned(
+              top: 20,
+              left: 20,
+              child: IconButton(
+                onPressed: () {
+                  // Revenir à la page précédente
+                  _pageController.previousPage(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                icon: const Icon(Icons.arrow_back),
+              ),
+            ),
+          if (currentPage < tutorialPages.length - 1)
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Aller à la page suivante
+                  _pageController.nextPage(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: const Text('Suivant'),
+              ),
+            ),
+          if (currentPage == tutorialPages.length - 1)
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Aller à la page d'accueil
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                  );
+                },
+                child: const Text('Terminé'),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class TutorialContentPage extends StatelessWidget {
+  final ImageProvider<Object> image;
+  final String text;
+
+  const TutorialContentPage({
+    Key? key,
+    required this.image,
+    required this.text,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(image: image),
+          const SizedBox(height: 16),
+          Text(
+            text,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key}) : super(key: key);
+
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  String selectedCountry = '';
+  String selectedCurrency = '';
+  bool enableNotifications = false;
+
+  final List<String> countries = [
+    'Country 1',
+    'Country 2',
+    'Country 3',
+    // ...
+  ];
+
+  final List<String> currencies = [
+    'Currency 1',
+    'Currency 2',
+    'Currency 3',
+    // ...
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Paramètres'),
+      ),
+      body: Column(
+        children: [
+          DropdownButtonFormField<String>(
+            value: selectedCountry,
+            onChanged: (value) {
+              setState(() {
+                selectedCountry = value!;
+              });
+            },
+            items: countries.map((country) {
+              return DropdownMenuItem<String>(
+                value: country,
+                child: Text(country),
+              );
+            }).toList(),
+            decoration: const InputDecoration(
+              labelText: 'Pays',
+            ),
+          ),
+          DropdownButtonFormField<String>(
+            value: selectedCurrency,
+            onChanged: (value) {
+              setState(() {
+                selectedCurrency = value!;
+              });
+            },
+            items: currencies.map((currency) {
+              return DropdownMenuItem<String>(
+                value: currency,
+                child: Text(currency),
+              );
+            }).toList(),
+            decoration: const InputDecoration(
+              labelText: 'Devis',
+            ),
+          ),
+          SwitchListTile(
+            title: const Text('Activer les notifications'),
+            value: enableNotifications,
+            onChanged: (value) {
+              setState(() {
+                enableNotifications = value;
+              });
+            },
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Envoyer une notification test
+              // ...
+            },
+            child: const Text('Envoyer une notification test'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Terminer la configuration et aller à la page d'accueil
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
+            },
+            child: const Text('Terminer'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Accueil'),
+      ),
+      body: Center(
+        child: SizedBox(
+          height: 400,
+          width: 600,
+          child: Card(
+            elevation: 6,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Activités Recentes',
+                    style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'Contenu',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Tout afficher'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+
+
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.deepPurple,
+        unselectedItemColor: Colors.black,
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.menu),
+              label: 'Menu'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Accueil'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Chercher'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Paramètres'
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Compte'
+          )
+        ],
+      ),
+
+
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import 'package:flutter/material.dart';
+import 'inscription.dart';
+import 'accueil.dart';
+
+class SignUpPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey[900],
+        title: Text(
+          'Test',
+          style: TextStyle(
+            fontFamily: 'Pacifico',
+            fontSize: 24,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                    100, 80, 0, 0), // Position de la boîte de dialogue
+                items: [
+                  PopupMenuItem(
+                    child: Text('Mot de passe oublié'),
+                    value: 'forgot_password',
+                  ),
+                  PopupMenuItem(
+                    child: Text('Aide'),
+                    value: 'help',
+                  ),
+                  PopupMenuItem(
+                    child: Text('Mentions légales'),
+                    value: 'legal',
+                  ),
+                  PopupMenuItem(
+                    child: Text('Conditions'),
+                    value: 'conditions',
+                  ),
+                  PopupMenuItem(
+                    child: Text('Politique de confidentialité'),
+                    value: 'privacy_policy',
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 100),
+          Text(
+            'Inscription',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Colors.pink,
+            ),
+          ),
+          SizedBox(height: 100),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Formulaire d\'inscription'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Adresse e-mail',
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        TextField(
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Mot de passe',
+                          ),
+                          obscureText: true,
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          // Action à effectuer lorsque le bouton "Inscription" du formulaire est cliqué
+                          // Vérification des informations, création du compte, etc.
+                          Navigator.pop(context);
+                        },
+                        child: Text('Inscription'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Text(
+              'Inscription',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(double.infinity, 60),
+              primary: Colors.pink,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+          SizedBox(height: 32),
+          Text(
+            'Ou inscrivez-vous avec:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Action à effectuer lorsque le bouton "S'inscrire avec Google" est cliqué
+                },
+                child: Text('Google'),
+                style: ElevatedButton.styleFrom(primary: Colors.red),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Action à effectuer lorsque le bouton "S'inscrire avec Facebook" est cliqué
+                },
+                child: Text('Facebook'),
+                style: ElevatedButton.styleFrom(primary: Colors.blue),
+              ),
+            ],
+          ),
+          SizedBox(height: 32),
+          Text(
+            'Vous avez déjà un compte ?',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+            ),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Formulaire d\'inscription'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Adresse e-mail',
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        TextField(
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Mot de passe',
+                          ),
+                          obscureText: true,
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          if (emailController.text == 'test' &&
+                              passwordController.text == 'azer') {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return InscriptionReussieDialog(
+                                    email: emailController.text);
+                              },
+                            ).then((_) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AccueilPage()),
+                              );
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'Adresse e-mail ou mot de passe incorrect.')),
+                            );
+                          }
+                        },
+                        child: Text('Inscription'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Text(
+              'S\'identifier',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.pink,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'En créant un compte, vous acceptez nos ',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[800],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Action à effectuer lorsque les conditions d'utilisation sont cliquées
+                },
+                child: Text(
+                  'Terms of Service',
+                  style: TextStyle(
+                    color: Colors.pink,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              Text(
+                ' et notre ', 
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[800],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Action à effectuer lorsque la politique de confidentialité est cliquée
+                },
+                child: Text(
+                  'Privacy Policy',
+                  style: TextStyle(
+                    color: Colors.pink,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    title: 'Lovely',
+    theme: ThemeData(
+      primaryColor: Colors.pink,
+      scaffoldBackgroundColor: Colors.grey[900],
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(primary: Colors.pink),
+      ),
+    ),
+    home: SignUpPage(),
+  ));
+}

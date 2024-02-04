@@ -1,0 +1,1246 @@
+class Message {
+  final String image;
+  final String communityName;
+  final String message;
+  final String timeAgo;
+  final Color color;
+
+  Message({
+    required this.image,
+    required this.communityName,
+    required this.message,
+    required this.timeAgo,
+    required this.color,
+  });
+}
+class Cequisepasse extends StatelessWidget {
+  List<Message> messages = [
+    Message(
+      image: 'lien_de_la_photo_1',
+      communityName: 'Nom de la communauté 1',
+      message: 'Message 1',
+      timeAgo: 'Il y a 1 heure',
+      color: Colors.green,
+    ),
+    Message(
+      image: 'lien_de_la_photo_2',
+      communityName: 'Nom de la communauté 2',
+      message: 'Message 2',
+      timeAgo: 'Il y a 2 heures',
+      color: Colors.blue,
+    ),
+    Message(
+      image: 'lien_de_la_photo_3',
+      communityName: 'Nom de la communauté 3',
+      message: 'Message 3',
+      timeAgo: 'Il y a 3 heures',
+      color: Colors.orange,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+          margin: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Ce qui se passe',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.0,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // Naviguer vers la page du "Voir plus"
+                    },
+                    child: Text(
+                      'Voir plus',
+                      style: TextStyle(
+                        color: Colors.pink,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.0),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    color: Colors.grey[800],
+                    padding: EdgeInsets.all(16.0),
+                    margin: EdgeInsets.only(bottom: 16.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 50.0,
+                          height: 50.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(messages[index].image),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              messages[index].communityName,
+                              style: TextStyle(
+                                color: messages[index].color, // Couleur différente pour chaque Nom de la communauté
+                                fontSize: 16.0,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              messages[index].message,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(), // Ajout d'un espace flexible pour pousser l'heure fictive vers la droite
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            messages[index].timeAgo,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+Pour résoudre le problème de `timeAgo` dépassant de l'écran et pour le placer en bas à droite, vous pouvez utiliser un widget `Expanded` pour envelopper la colonne du message. Cela permettra à la colonne de prendre tout l'espace disponible et d'éviter le dépassement de l'écran. Voici le code mis à jour:
+
+```dart
+return Container(
+  color: Colors.grey[800],
+  padding: EdgeInsets.all(16.0),
+  margin: EdgeInsets.only(bottom: 16.0),
+  child: Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          image: DecorationImage(
+            image: AssetImage(messages[index].image),
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+      SizedBox(width: 16.0),
+      Expanded( // Ajout du widget Expanded
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              messages[index].communityName,
+              style: TextStyle(
+                color: messages[index].color,
+                fontSize: 16.0,
+              ),
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              messages[index].message,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12.0,
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                messages[index].timeAgo,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+);
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class CustomContainer extends StatefulWidget {
+  @override
+  _CustomContainerState createState() => _CustomContainerState();
+}
+
+class _CustomContainerState extends State<CustomContainer> {
+  bool isExpanded = false;
+  int numContainers = 3;
+  ScrollController _scrollController = ScrollController();
+
+  // Liste de noms, photos, messages et communautés
+  List<String> profileImages = [
+    "person1",
+    "person2",
+    "person3",
+    "person1",
+    "person2",
+    "person3",
+    "person1",
+    "person2",
+    "person3",
+    "person1",
+    "person2",
+    "person3",
+    "person1",
+    "person2",
+    "person3",
+    "person1",
+    "person2",
+    "person3",
+    "person1",
+    "person2",
+    // Ajoutez plus d'images ici
+  ];
+  List<String> profileNames = [
+    "Nom 1",
+    "Nom 2",
+    "Nom 3",
+    "Nom 1",
+    "Nom 2",
+    "Nom 3",
+    "Nom 1",
+    "Nom 2",
+    "Nom 3",
+    "Nom 1",
+    "Nom 2",
+    "Nom 3",
+    "Nom 1",
+    "Nom 2",
+    "Nom 3",
+    "Nom 1",
+    "Nom 2",
+    "Nom 3",
+    "Nom 1",
+    "Nom 2",
+    // Ajoutez plus de noms ici
+  ];
+  List<String> communityNames = [
+    "Communauté 1",
+    "Communauté 2",
+    "Communauté 3",
+    "Communauté 1",
+    "Communauté 2",
+    "Communauté 3",
+    "Communauté 1",
+    "Communauté 2",
+    "Communauté 3",
+    "Communauté 1",
+    "Communauté 2",
+    "Communauté 3",
+    "Communauté 1",
+    "Communauté 2",
+    "Communauté 3",
+    "Communauté 1",
+    "Communauté 2",
+    "Communauté 3",
+    "Communauté 1",
+    "Communauté 2",
+    // Ajoutez plus de noms de communautés ici
+  ];
+  List<String> messages = [
+    "Message 1",
+    "Message 2",
+    "Message 3",
+    "Message 1",
+    "Message 2",
+    "Message 3",
+    "Message 1",
+    "Message 2",
+    "Message 3",
+    "Message 1",
+    "Message 2",
+    "Message 3",
+    "Message 1",
+    "Message 2",
+    "Message 3",
+    "Message 1",
+    "Message 2",
+    "Message 3",
+    "Message 1",
+    "Message 2",
+    // Ajoutez plus de messages ici
+  ];
+  List<String> messageDates = [
+    "01/01/2022",
+    "02/01/2022",
+    "03/01/2022",
+    "01/01/2022",
+    "02/01/2022",
+    "03/01/2022",
+    "01/01/2022",
+    "02/01/2022",
+    "03/01/2022",
+    "01/01/2022",
+    "02/01/2022",
+    "03/01/2022",
+    "01/01/2022",
+    "02/01/2022",
+    "03/01/2022",
+    "01/01/2022",
+    "02/01/2022",
+    "03/01/2022",
+    "01/01/2022",
+    "02/01/2022",
+    // Ajoutez plus de dates ici
+  ];
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      width: MediaQuery.of(context).size.width * 0.97,
+      height: isExpanded ? (numContainers * 120.0) + 60.0 : 150,
+      decoration: BoxDecoration(
+        color: Colors.pink[900],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    'Text en gras',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                    numContainers = isExpanded ? 20 : 3;
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    isExpanded ? 'moins' : 'plus',
+                    style: TextStyle(
+                      color: Colors.pink,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: max(numContainers, 3),
+              itemBuilder: (context, index) {
+                return _buildLargeContainer(
+                  profileImages[index % profileImages.length],
+                  profileNames[index % profileNames.length],
+                  communityNames[index % communityNames.length],
+                  messages[index % messages.length],
+                  messageDates[index % messageDates.length],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLargeContainer(String profileImage, String profileName,
+      String communityName, String message, String date) {
+    return Container(
+      margin: EdgeInsets.all(10),
+      height: 100,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: AssetImage('assets/$profileImage.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    profileName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    communityName,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 5),
+              Text(
+                message,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: 10),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  date,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Je m'excuse pour la confusion. Pour avoir un seul `return` de `Container` dans votre code, vous pouvez utiliser la méthode `build` d'une autre manière en définissant une variable `container` pour contenir le `Container`, puis la retourner à la fin de la méthode `build`. Voici comment vous pouvez le faire :
+
+```dart
+@override
+Widget build(BuildContext context) {
+  Widget container = Container(
+    margin: EdgeInsets.all(16.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 16.0),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: messages.length,
+          itemBuilder: (context, index) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.pink[900],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: EdgeInsets.all(16.0),
+              margin: EdgeInsets.only(bottom: 16.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      image: DecorationImage(
+                        image: AssetImage(messages[index].image),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    // Ajout du widget Expanded
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          messages[index].communityName,
+                          style: TextStyle(
+                            color: messages[index].color,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          messages[index].message,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            messages[index].timeAgo,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+
+  return container;
+}
+```
+
+
+
+
+
+
+
+
+Voici le code pour créer la classe AssistancePage() avec les spécifications que vous avez fournies :
+
+```dart
+Désolé pour la confusion. Voici la version modifiée du code corrigé pour répondre à vos exigences :
+
+```dart
+import 'package:flutter/material.dart';
+
+class AssistancePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.pink,
+        title: Text("Assistance"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: Container(
+        color: Colors.black,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "F A Q",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.pink,
+                  ),
+                ),
+              ),
+              FAQQuestionTile(
+                question: "Question 1",
+                solution: "Solution 1",
+              ),
+              FAQQuestionTile(
+                question: "Question 2",
+                solution: "Solution 2",
+              ),
+              FAQQuestionTile(
+                question: "Question 3",
+                solution: "Solution 3",
+              ),
+              FAQQuestionTile(
+                question: "Question 4",
+                solution: "Solution 4",
+              ),
+              FAQQuestionTile(
+                question: "Question 5",
+                solution: "Solution 5",
+              ),
+              FAQQuestionTile(
+                question: "Question 6",
+                solution: "Solution 6",
+              ),
+              FAQQuestionTile(
+                question: "Question 7",
+                solution: "Solution 7",
+              ),
+              SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+      Pour rendre les éléments scrollables, vous pouvez les envelopper dans un `SingleChildScrollView`. Voici le code modifié pour rendre le contenu scrollable :
+
+```dart
+class FAQQuestionTile extends StatefulWidget {
+  final String question;
+  final String solution;
+
+  const FAQQuestionTile({
+    Key? key,
+    required this.question,
+    required this.solution,
+  }) : super(key: key);
+
+  @override
+  _FAQQuestionTileState createState() => _FAQQuestionTileState();
+}
+
+class _FAQQuestionTileState extends State<FAQQuestionTile> {
+  bool showSolution = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            showSolution = !showSolution;
+          });
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.question,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              if (showSolution) ...[
+                SizedBox(height: 8),
+                Text(
+                  widget.solution,
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+Maintenant, les éléments de chaque `FAQQuestionTile` seront scrollables si le contenu dépasse la taille de l'écran.
+    );
+  }
+}
+
+class FAQQuestionTile extends StatefulWidget {
+  final String question;
+  final String solution;
+
+  const FAQQuestionTile({
+    Key? key,
+    required this.question,
+    required this.solution,
+  }) : super(key: key);
+
+  @override
+  _FAQQuestionTileState createState() => _FAQQuestionTileState();
+}
+
+class _FAQQuestionTileState extends State<FAQQuestionTile> {
+  bool showSolution = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            showSolution = !showSolution;
+          });
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.question,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            if (showSolution) ...[
+              SizedBox(height: 8),
+              Text(
+                widget.solution,
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GptPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.pink,
+        title: Text("Gpt"),
+      ),
+      body: Container(
+        child: Center(
+          child: Text("Gpt Page"),
+        ),
+      ),
+    );
+  }
+}
+```
+
+J'ai modifié le widget `FAQQuestionTile` pour ajouter un état interne (`showSolution`) qui détermine si la solution doit être affichée ou non lorsqu'on clique sur une question. J'ai également déplacé le bouton du logo message au bas à droite de la page en utilisant `floatingActionButton` et `floatingActionButtonLocation`.
+```
+
+Assurez-vous d'avoir importé les packages nécessaires et de les ajouter à votre `pubspec.yaml`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pour accomplir cela, vous devrez utiliser un état pour stocker et vérifier les informations de connexion, puis naviguer vers la page "AccueilPage" lorsque les informations sont correctes. Voici comment vous pouvez le faire :
+
+1. Créez un état pour stocker les valeurs du nom d'utilisateur, de l'email et du mot de passe :
+
+```
+String userName = "";
+String email = "";
+String password = "";
+```
+
+2. Modifiez la méthode "component1" pour mettre à jour ces valeurs lorsque l'utilisateur entre des informations :
+
+```
+Widget component1(IconData icon, String hintText, bool isPassword, bool isEmail) {
+  Size size = MediaQuery.of(context).size;
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(15),
+    child: BackdropFilter(
+      filter: ImageFilter.blur(
+        sigmaY: 15,
+        sigmaX: 15,
+      ),
+      child: Container(
+        height: size.width / 8,
+        width: size.width / 1.2,
+        alignment: Alignment.center,
+        padding: EdgeInsets.only(right: size.width / 30),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(.05),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: TextField(
+          style: TextStyle(color: Colors.white.withOpacity(.8)),
+          cursorColor: Colors.white,
+          obscureText: isPassword,
+          keyboardType:
+              isEmail ? TextInputType.emailAddress : TextInputType.text,
+          onChanged: (value) {
+            if (isEmail) {
+              email = value;
+            } else {
+              userName = value;
+            }
+          },
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              icon,
+              color: Colors.white.withOpacity(.7),
+            ),
+            border: InputBorder.none,
+            hintMaxLines: 1,
+            hintText: hintText,
+            hintStyle:
+                TextStyle(fontSize: 14, color: Colors.white.withOpacity(.5)),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+```
+
+3. Modifiez la méthode "component2" pour vérifier les informations de connexion lorsque le bouton "LOGIN" est pressé :
+
+```
+Widget component2(String string, double width, VoidCallback voidCallback) {
+  Size size = MediaQuery.of(context).size;
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(15),
+    child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaY: 15, sigmaX: 15),
+      child: InkWell(
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        onTap: voidCallback,
+        child: Container(
+          height: size.width / 8,
+          width: size.width / width,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(.05),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Text(
+            string,
+            style: TextStyle(color: Colors.white.withOpacity(.8)),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+```
+
+4. Dans le `onTap` du bouton "LOGIN", ajoutez la vérification des informations de connexion et la navigation vers la page "AccueilPage" si les informations sont correctes :
+
+```
+component2(
+  'LOGIN',
+  2.58,
+  () {
+    HapticFeedback.lightImpact();
+    if(userName == 'a' && email == 'a' && password == 'a') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AccueilPage()),
+      );
+    }
+  },
+),
+```
+
+5. Pour le bouton "Forgotten password", vous pouvez ajouter une autre logique pour réinitialiser le mot de passe en vérifiant l'email de l'utilisateur.
+
+```
+component2(
+  'Forgotten password!',
+  2.58,
+  () {
+    HapticFeedback.lightImpact();
+    // Vérification de l'email de l'utilisateur et réinitialisation du mot de passe
+    Fluttertoast.showToast(
+        msg: 'Forgotten password button pressed');
+  },
+),
+```
+
+Assurez-vous d'avoir importé les dépendances nécessaires, telles que "flutter/material.dart" et "package:fluttertoast/fluttertoast.dart".
+
+Cela devrait vous aider à accomplir votre objectif. N'hésitez pas à ajuster le code selon vos besoins.
+
+
+
+
+
+
+
+Dans le widget `component2`, vous pouvez ajouter des champs de saisie pour l'e-mail et le mot de passe ainsi qu'un bouton pour l'authentification. Voici un exemple de mise en place de la logique d'authentification.
+
+```dart
+Widget component2(String buttonText, double buttonHeight, Function loginPressed) {
+  Size size = MediaQuery.of(context).size;
+  return Column(
+    children: [
+      component1(Icons.email, 'Email', false, true),
+      SizedBox(height: size.height / 40),
+      component1(Icons.lock, 'Mot de passe', true, false),
+      SizedBox(height: size.height / 40),
+      GestureDetector(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          Fluttertoast.showToast(msg: 'Login button pressed');
+          // Votre logique d'authentification ici
+          String email = getEmail(); // Récupérer la valeur de l'e-mail
+          String password = getPassword(); // Récupérer la valeur du mot de passe
+
+          // Votre traitement d'authentification
+          if (email.isNotEmpty && password.isNotEmpty) {
+            // Faire appel à une méthode d'authentification ou appeler une API pour vérifier les informations d'identification
+            // par exemple :
+            bool isAuthenticated = await authenticate(email, password);
+            if (isAuthenticated) {
+              // L'utilisateur est authentifié, vous pouvez maintenant rediriger ou afficher un message de succès
+              Fluttertoast.showToast(msg: 'Authentification réussie');
+            } else {
+              // L'utilisateur n'est pas authentifié, vous pouvez afficher un message d'erreur
+              Fluttertoast.showToast(msg: 'Authentification échouée');
+            }
+          } else {
+            // L'utilisateur n'a pas saisi les informations nécessaires, vous pouvez afficher un message d'erreur
+            Fluttertoast.showToast(msg: 'Veuillez remplir tous les champs');
+          }
+        },
+        child: Container(
+          height: size.height / buttonHeight,
+          width: size.width / 1.5,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(.3),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            buttonText,
+            style: TextStyle(
+              color: Colors.white.withOpacity(.8),
+              fontWeight: FontWeight.bold,
+              fontSize: size.width / 22,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+```
+
+Dans cet exemple, nous avons ajouté des champs de saisie pour l'e-mail et le mot de passe en utilisant la fonction `component1`. Lorsque l'utilisateur appuie sur le bouton de connexion, la fonction `loginPressed` est appelée et vous pouvez y mettre votre logique d'authentification.
+
+Dans cette fonction, vous pouvez récupérer les valeurs saisies dans les champs de saisie en appelant les méthodes `getEmail` et `getPassword`, qui devraient accéder aux variables `email` et `userName` définies précédemment.
+
+Ensuite, vous pouvez effectuer le traitement d'authentification, par exemple en faisant appel à une méthode d'authentification ou en appelant une API pour vérifier les informations d'identification fournies par l'utilisateur.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pour enregistrer la saisie de l'utilisateur dans la variable `userName`, vous pouvez utiliser un TextEditingController. Voici comment vous pouvez modifier votre code pour enregistrer la saisie de l'utilisateur et vérifier si elle est correcte :
+
+1. Déclarez et initialisez un TextEditingController pour la variable `userName` :
+
+```dart
+TextEditingController userNameController = TextEditingController();
+```
+
+2. Utilisez `userNameController` dans votre code pour obtenir la valeur saisie par l'utilisateur :
+
+```dart
+component1(Icons.account_circle_outlined, 'User name...', false, false, userNameController.text),
+```
+
+3. À l'intérieur de votre méthode de connexion (lorsque le bouton "LOGIN" est pressé), vérifiez si la valeur de `userNameController.text` est correcte et ouvrez la page AccueilPage() en conséquence. Voici un exemple de modification du code pour vérifier si `userNameController.text` est "a" :
+
+```dart
+component2(
+  'LOGIN',
+  2.58,
+  () {
+    HapticFeedback.lightImpact();
+    if (userNameController.text == "a" && emailController.text == "a" && passwordController.text == "a") {
+      // Les valeurs sont correctes, ouvrez la page AccueilPage()
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AccueilPage(),
+        ),
+      );
+    } else {
+      // Les valeurs ne sont pas correctes, affichez un message d'erreur
+      Fluttertoast.showToast(msg: 'Identifiants incorrects');
+    }
+  },
+),
+```
+
+Assurez-vous également d'avoir un TextEditingController pour les variables `email` et `password` si vous les utilisez dans votre code, de la même manière que pour `userName`.
+
+
+
+
+
+
+
+
+
+
+
+
+ Non, le code actuel ne vérifie pas les données saisies dans les champs de nom d'utilisateur, de mot de passe et d'adresse e-mail. Le code se concentre principalement sur la conception et la mise en forme des widgets dans le composant `component1` et sur la gestion des modifications de texte.
+
+Pour effectuer des validations sur les données saisies, vous devrez ajouter une logique supplémentaire à votre code. Par exemple, vous pouvez ajouter des vérifications de validation à l'aide de `RegExp` pour l'adresse e-mail et des conditions pour vérifier la longueur du nom d'utilisateur et du mot de passe.
+
+Voici un exemple de code qui peut vous aider à mettre en place ces validations :
+
+```dart
+TextEditingController emailController = TextEditingController();
+TextEditingController userNameController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
+
+// ...
+
+Widget component1(
+  IconData icon,
+  String hintText,
+  bool isPassword,
+  bool isEmail,
+  TextEditingController controller,
+) {
+  Size size = MediaQuery.of(context).size;
+
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(15),
+    child: BackdropFilter(
+      filter: ImageFilter.blur(
+        sigmaY: 15,
+        sigmaX: 15,
+      ),
+      child: Container(
+        height: size.width / 8,
+        width: size.width / 1.2,
+        alignment: Alignment.center,
+        padding: EdgeInsets.only(right: size.width / 30),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(.05),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: TextField(
+          style: TextStyle(color: Colors.white.withOpacity(.8)),
+          cursorColor: Colors.white,
+          obscureText: isPassword,
+          keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
+          onChanged: (value) {
+            if (isEmail) {
+              emailController.text = value;
+            } else {
+              userNameController.text = value;
+            }
+          },
+          controller: controller,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              icon,
+              color: Colors.white.withOpacity(.7),
+            ),
+            border: InputBorder.none,
+            hintMaxLines: 1,
+            hintText: hintText,
+            hintStyle: TextStyle(fontSize: 14, color: Colors.white.withOpacity(.5)),
+            errorText: isEmail ? (validateEmail() ? null : "Invalid email") : null,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+bool validateEmail() {
+  String email = emailController.text.trim();
+  RegExp regExp = RegExp(
+    r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", 
+    caseSensitive: false,
+    multiLine: false
+  );
+  return regExp.hasMatch(email);
+}
+
+bool validateUsername() {
+  String username = userNameController.text.trim();
+  return username.length >= 3;
+}
+
+bool validatePassword() {
+  String password = passwordController.text.trim();
+  return password.length >= 6;
+}
+
+// ...
+```
+
+Dans cet exemple, nous avons ajouté une méthode `validateEmail` qui utilise une expression régulière pour valider l'adresse e-mail, une méthode `validateUsername` pour vérifier la longueur du nom d'utilisateur et une méthode `validatePassword` pour vérifier la longueur du mot de passe. Vous pouvez appeler ces méthodes dans votre code pour effectuer les vérifications nécessaires et afficher des messages d'erreur appropriés à l'utilisateur en utilisant la propriété `errorText` dans la configuration de `InputDecoration`.
+
+Ces méthodes de validation ne sont que des exemples et peuvent être adaptées selon vos besoins spécifiques.
+
+
+
+Voici le code mis à jour pour colorier le bouton en rose, lui donner des bords arrondis et une marge :
+
+```dart
+import 'package:flutter/material.dart';
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('My App'),
+      ),
+      body: Center(
+        child: Text('Welcome to My App'),
+      ),
+      bottomNavigationBar: Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.all(16),
+        child: ElevatedButton(
+          onPressed: () {
+            saveModifications();
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Colors.pink, // Couleur rose
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          child: Text(
+            'Appliquer les modifications',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void saveModifications() {
+    // Logique pour enregistrer les modifications
+  }
+}
+```
+
+Dans cette version mise à jour, j'ai ajouté `margin: EdgeInsets.all(16)` pour ajouter une marge de 16 pixels autour du bouton. J'ai également utilisé `primary: Colors.pink` pour colorier le bouton en rose et `shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))` pour définir les bords arrondis du bouton.
+
+N'hésitez pas à me faire savoir si vous avez d'autres questions ou si vous souhaitez apporter d'autres modifications.
